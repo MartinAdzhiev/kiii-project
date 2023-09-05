@@ -9,6 +9,9 @@ import mk.ukim.finki.kiiiproject.repository.DepartmentRepository;
 import mk.ukim.finki.kiiiproject.repository.DoctorRepository;
 import mk.ukim.finki.kiiiproject.repository.HospitalRepository;
 import mk.ukim.finki.kiiiproject.service.DoctorService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +35,25 @@ public class DoctorServiceImplementation implements DoctorService {
         return this.doctorRepository.findById(id);
     }
 
+
     @Override
-    public List<Doctor> findAll() {
-        return this.doctorRepository.findAll();
+    public Page<Doctor> findAllWithPagination(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return this.doctorRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Doctor> filterAndPaginate(String departmentName, String hospitalName, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        if (!departmentName.isEmpty() && !hospitalName.isEmpty()) {
+            return this.doctorRepository.findAllByDepartment_NameAndHospital_Name(departmentName, hospitalName, pageable);
+        } else if (!departmentName.isEmpty()) {
+            return this.doctorRepository.findAllByDepartment_Name(departmentName, pageable);
+        } else if (!hospitalName.isEmpty()) {
+            return this.doctorRepository.findAllByHospital_Name(hospitalName, pageable);
+        }
+        return this.doctorRepository.findAll(pageable);
     }
 
     @Override
