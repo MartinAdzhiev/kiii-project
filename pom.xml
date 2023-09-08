@@ -15,6 +15,7 @@
     <description>kiii-project</description>
     <properties>
         <java.version>17</java.version>
+        <start-class>mk.ukim.finki.kiiiproject.KiiiProjectApplication</start-class>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +54,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>mk.ukim.finki.kiiiproject.KiiiProjectApplication</mainClass>
+                    <layout>JAR</layout>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -60,6 +63,13 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

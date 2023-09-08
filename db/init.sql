@@ -26,3 +26,21 @@ create table doctors
 
 
 
+insert into departments (department_name) VALUES
+                                            ('Cardiology'),
+                                            ('Neurology'),
+                                            ('Radiology'),
+                                            ('Orthopedics'),
+                                            ('Radiology'),
+                                            ('Hematology');
+
+
+insert into hospitals (hospital_name, city) VALUES
+                                             ('Drzavna', 'Skopje'),
+                                             ('8-mi Septemvri', 'Skopje'),
+                                             ('Gradska Stip', 'Stip'),
+                                             ('Gradska Prilep', 'Prilep'),
+                                             ('Zan Mitrev', 'Strumica');
+
+
+

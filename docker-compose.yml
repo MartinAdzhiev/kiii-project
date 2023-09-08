@@ -1,0 +1,28 @@
+version: "3"
+services:
+  db:
+    image: "postgres"
+    restart: always
+    container_name: "db"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=doctors
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "app"
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/doctors"
+volumes:
+  postgres-data:
+
