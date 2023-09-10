@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: kiii
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-svc:5432/doctors
+  SPRING_DATASOURCE_USERNAME: admin
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+  namespace: kiii
+data:
+  SPRING_DATASOURCE_PASSWORD: YWRtaW4=
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: kiii
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+        namespace: kiii
+    spec:
+      containers:
+        - name: app
+          image: adzhiev007/kii-project-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+  namespace: kiii
+spec:
+  selector:
+    app: app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
